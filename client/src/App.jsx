@@ -101,12 +101,28 @@ async function toggleTask(id) {
 }
 
 
-  // Delete from React state for now
-  function deleteTask(id) {
+  // Delete a task from MongoDB through the API
+async function deleteTask(id) {
+  try {
+    setError("");
+
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: "DELETE",
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to delete task");
+    }
+
     setTasks((previousTasks) =>
       previousTasks.filter((task) => task.id !== id)
     );
+  } catch (err) {
+    setError(err.message || "Could not delete task.");
   }
+}
 
   return (
     <main style={{ fontFamily: "Arial", padding: "30px" }}>
