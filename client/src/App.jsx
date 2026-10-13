@@ -8,6 +8,8 @@ function App() {
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [editingId, setEditingId] = useState(null);
+  const [editingTitle, setEditingTitle] = useState("");
 
   // Load tasks from the backend when the page opens
   useEffect(() => {
@@ -102,27 +104,166 @@ async function toggleTask(id) {
 
 
   // Delete a task from MongoDB through the API
-async function deleteTask(id) {
-  try {
+// async function deleteTask(id) {
+//   try {
+//     setError("");
+
+//     const response = await fetch(`${API_URL}/${id}`, {
+//       method: "DELETE",
+//     });
+
+//     const data = await response.json();
+
+//     if (!response.ok) {
+//       throw new Error(data.message || "Failed to delete task");
+//     }
+
+//     setTasks((previousTasks) =>
+//       previousTasks.filter((task) => task.id !== id)
+//     );
+//   } catch (err) {
+//     setError(err.message || "Could not delete task.");
+//   }
+// }
+
+//   return (
+//     <main style={{ fontFamily: "Arial", padding: "30px" }}>
+//       <h1>TaskFlow</h1>
+//       <p>Your project management workspace.</p>
+
+//       <form onSubmit={handleSubmit}>
+//         <input
+//           value={title}
+//           onChange={(event) => setTitle(event.target.value)}
+//           placeholder="Enter a task..."
+//         />
+//         <button type="submit">Add Task</button>
+//       </form>
+
+//       {error && <p style={{ color: "red" }}>{error}</p>}
+
+//       <h2>My Tasks ({tasks.length})</h2>
+
+//       {loading ? (
+//         <p>Loading tasks...</p>
+//       ) : tasks.length === 0 ? (
+//         <p>No tasks yet. Add your first task!</p>
+//       ) : (
+//         <ul>
+//           {tasks.map((task) => (
+//             <li key={task.id} style={{ marginBottom: "10px" }}>
+//               <input
+//                 type="checkbox"
+//                 checked={task.completed}
+//                 onChange={() => toggleTask(task.id)}
+//               />
+
+//               <span
+//                 style={{
+//                   margin: "0 10px",
+//                   textDecoration: task.completed
+//                     ? "line-through"
+//                     : "none",
+//                 }}
+//               >
+//                 {task.title}
+//               </span>
+
+//               <button
+//                 type="button"
+//                 onClick={() => deleteTask(task.id)}
+//               >
+//                 Delete
+//               </button>
+//             </li>
+//           ))}
+//         </ul>
+//       )}
+//     </main>
+//   );
+// }
+
+// export default App;
+// Delete a task from MongoDB through the API
+  async function deleteTask(id) {
+    try {
+      setError("");
+
+      const response = await fetch(`${API_URL}/${id}`, {
+        method: "DELETE",
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to delete task");
+      }
+
+      setTasks((previousTasks) =>
+        previousTasks.filter((task) => task.id !== id)
+      );
+
+      if (editingId === id) {
+        setEditingId(null);
+        setEditingTitle("");
+      }
+    } catch (err) {
+      setError(err.message || "Could not delete task.");
+    }
+  }
+
+  // Start editing a task
+  function startEdit(task) {
+    setEditingId(task.id);
+    setEditingTitle(task.title);
     setError("");
+  }
 
-    const response = await fetch(`${API_URL}/${id}`, {
-      method: "DELETE",
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || "Failed to delete task");
+  // Save the edited title
+  async function saveEdit(id) {
+    if (!editingTitle.trim()) {
+      setError("Task title cannot be empty.");
+      return;
     }
 
-    setTasks((previousTasks) =>
-      previousTasks.filter((task) => task.id !== id)
-    );
-  } catch (err) {
-    setError(err.message || "Could not delete task.");
+    try {
+      setError("");
+
+      const response = await fetch(`${API_URL}/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: editingTitle.trim(),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to edit task");
+      }
+
+      setTasks((previousTasks) =>
+        previousTasks.map((task) =>
+          task.id === id ? data.task : task
+        )
+      );
+
+      setEditingId(null);
+      setEditingTitle("");
+    } catch (err) {
+      setError(err.message || "Could not edit task.");
+    }
   }
-}
+
+  // Cancel editing
+  function cancelEdit() {
+    setEditingId(null);
+    setEditingTitle("");
+    setError("");
+  }
 
   return (
     <main style={{ fontFamily: "Arial", padding: "30px" }}>
@@ -156,16 +297,51 @@ async function deleteTask(id) {
                 onChange={() => toggleTask(task.id)}
               />
 
-              <span
-                style={{
-                  margin: "0 10px",
-                  textDecoration: task.completed
-                    ? "line-through"
-                    : "none",
-                }}
-              >
-                {task.title}
-              </span>
+              {editingId === task.id ? (
+                <>
+                  <input
+                    value={editingTitle}
+                    onChange={(event) =>
+                      setEditingTitle(event.target.value)
+                    }
+                    aria-label="Edit task title"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => saveEdit(task.id)}
+                  >
+                    Save
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={cancelEdit}
+                  >
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <>
+                  <span
+                    style={{
+                      margin: "0 10px",
+                      textDecoration: task.completed
+                        ? "line-through"
+                        : "none",
+                    }}
+                  >
+                    {task.title}
+                  </span>
+
+                  <button
+                    type="button"
+                    onClick={() => startEdit(task)}
+                  >
+                    Edit
+                  </button>
+                </>
+              )}
 
               <button
                 type="button"

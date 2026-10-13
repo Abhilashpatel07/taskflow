@@ -92,11 +92,11 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// PATCH /api/tasks/:id — update task completion
+ 
 router.patch("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { completed } = req.body;
+    const { title, completed } = req.body;
 
     if (!mongoose.isValidObjectId(id)) {
       return res.status(400).json({
@@ -105,16 +105,40 @@ router.patch("/:id", async (req, res) => {
       });
     }
 
-    if (typeof completed !== "boolean") {
+    const updates = {};
+
+    if (title !== undefined) {
+      if (typeof title !== "string" || !title.trim()) {
+        return res.status(400).json({
+          success: false,
+          message: "Task title is required",
+        });
+      }
+
+      updates.title = title.trim();
+    }
+
+    if (completed !== undefined) {
+      if (typeof completed !== "boolean") {
+        return res.status(400).json({
+          success: false,
+          message: "Completed must be true or false",
+        });
+      }
+
+      updates.completed = completed;
+    }
+
+    if (Object.keys(updates).length === 0) {
       return res.status(400).json({
         success: false,
-        message: "Completed must be true or false",
+        message: "Provide a title or completed value to update",
       });
     }
 
     const updatedTask = await Task.findByIdAndUpdate(
       id,
-      { completed },
+      { $set: updates },
       { new: true, runValidators: true }
     );
 
@@ -130,6 +154,8 @@ router.patch("/:id", async (req, res) => {
       task: formatTask(updatedTask),
     });
   } catch (error) {
+    console.error("Update task error:", error);
+
     res.status(500).json({
       success: false,
       message: "Failed to update task",
@@ -138,3 +164,4 @@ router.patch("/:id", async (req, res) => {
 });
 
 module.exports = router;
+ 
