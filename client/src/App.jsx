@@ -186,6 +186,15 @@ function App() {
 
   // Filter tasks based on selected filter
   const filteredTasks = tasks.filter((task) => {
+const totalTasks = tasks.length;
+
+const completedTasks = tasks.filter(
+  (task) => task.completed
+).length;
+
+const pendingTasks = tasks.filter(
+  (task) => !task.completed
+).length;  
     if (filter === "pending") {
       return !task.completed;
     }
@@ -196,149 +205,6 @@ function App() {
 
     return true;
   });
-
-//   return (
-//     <main style={{ fontFamily: "Arial", padding: "30px" }}>
-//       <h1>TaskFlow</h1>
-
-//       <p>Your project management workspace.</p>
-
-//       {/* Add Task Form */}
-//       <form onSubmit={handleSubmit}>
-//         <input
-//           value={title}
-//           onChange={(event) => setTitle(event.target.value)}
-//           placeholder="Enter a task..."
-//         />
-
-//         <button type="submit">Add Task</button>
-//       </form>
-
-//       {/* Error Message */}
-//       {error && <p style={{ color: "red" }}>{error}</p>}
-
-//       {/* Day 7 Filters */}
-//       <div
-//         style={{
-//           marginTop: "20px",
-//           marginBottom: "20px",
-//         }}
-//       >
-//         <button
-//           type="button"
-//           onClick={() => setFilter("all")}
-//           disabled={filter === "all"}
-//         >
-//           All
-//         </button>
-
-//         <button
-//           type="button"
-//           onClick={() => setFilter("pending")}
-//           disabled={filter === "pending"}
-//           style={{ marginLeft: "10px" }}
-//         >
-//           Pending
-//         </button>
-
-//         <button
-//           type="button"
-//           onClick={() => setFilter("completed")}
-//           disabled={filter === "completed"}
-//           style={{ marginLeft: "10px" }}
-//         >
-//           Completed
-//         </button>
-//       </div>
-
-//       {/* Task Count */}
-//       <h2>
-//         My Tasks ({filteredTasks.length})
-//       </h2>
-
-//       {loading ? (
-//         <p>Loading tasks...</p>
-//       ) : tasks.length === 0 ? (
-//         <p>No tasks yet. Add your first task!</p>
-//       ) : filteredTasks.length === 0 ? (
-//         <p>No {filter} tasks found.</p>
-//       ) : (
-//         <ul>
-//           {filteredTasks.map((task) => (
-//             <li
-//               key={task.id}
-//               style={{ marginBottom: "10px" }}
-//             >
-//               {/* Completion Checkbox */}
-//               <input
-//                 type="checkbox"
-//                 checked={task.completed}
-//                 onChange={() => toggleTask(task.id)}
-//               />
-
-//               {/* Edit Mode */}
-//               {editingId === task.id ? (
-//                 <>
-//                   <input
-//                     value={editingTitle}
-//                     onChange={(event) =>
-//                       setEditingTitle(event.target.value)
-//                     }
-//                     aria-label="Edit task title"
-//                   />
-
-//                   <button
-//                     type="button"
-//                     onClick={() => saveEdit(task.id)}
-//                   >
-//                     Save
-//                   </button>
-
-//                   <button
-//                     type="button"
-//                     onClick={cancelEdit}
-//                   >
-//                     Cancel
-//                   </button>
-//                 </>
-//               ) : (
-//                 <>
-//                   {/* Task Title */}
-//                   <span
-//                     style={{
-//                       margin: "0 10px",
-//                       textDecoration: task.completed
-//                         ? "line-through"
-//                         : "none",
-//                     }}
-//                   >
-//                     {task.title}
-//                   </span>
-
-//                   {/* Edit Button */}
-//                   <button
-//                     type="button"
-//                     onClick={() => startEdit(task)}
-//                   >
-//                     Edit
-//                   </button>
-//                 </>
-//               )}
-
-//               {/* Delete Button */}
-//               <button
-//                 type="button"
-//                 onClick={() => deleteTask(task.id)}
-//               >
-//                 Delete
-//               </button>
-//             </li>
-//           ))}
-//         </ul>
-//       )}
-//     </main>
-//   );
-// }
 return (
   <main className="taskflow-container">
     <header className="taskflow-header">
