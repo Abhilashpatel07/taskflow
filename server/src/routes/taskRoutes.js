@@ -1,4 +1,3 @@
- 
 const express = require("express");
 const mongoose = require("mongoose");
 const Task = require("../models/Task");
@@ -10,6 +9,7 @@ const formatTask = (task) => ({
   id: task._id.toString(),
   title: task.title,
   completed: task.completed,
+  priority: task.priority,
   createdAt: task.createdAt,
   updatedAt: task.updatedAt,
 });
@@ -34,7 +34,7 @@ router.get("/", async (req, res) => {
 // POST /api/tasks — create a task
 router.post("/", async (req, res) => {
   try {
-    const { title } = req.body;
+    const { title ,priority} = req.body;
 
     if (typeof title !== "string" || !title.trim()) {
       return res.status(400).json({
@@ -42,11 +42,19 @@ router.post("/", async (req, res) => {
         message: "Task title is required",
       });
     }
+    const validPriorities = ["low", "medium", "high"];
 
-    const newTask = await Task.create({
-      title: title.trim(),
-    });
+if (priority !== undefined && !validPriorities.includes(priority)) {
+  return res.status(400).json({
+    success: false,
+    message: "Priority must be low, medium, or high",
+  });
+} 
 
+  const newTask = await Task.create({
+  title: title.trim(),
+  priority: priority || "medium",
+});
     res.status(201).json({
       success: true,
       task: formatTask(newTask),
@@ -91,12 +99,11 @@ router.delete("/:id", async (req, res) => {
     });
   }
 });
-
- 
+// PATCH /api/tasks/:id — update a task
 router.patch("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, completed } = req.body;
+    const { title, completed, priority } = req.body;
 
     if (!mongoose.isValidObjectId(id)) {
       return res.status(400).json({
@@ -107,6 +114,7 @@ router.patch("/:id", async (req, res) => {
 
     const updates = {};
 
+    // Update title
     if (title !== undefined) {
       if (typeof title !== "string" || !title.trim()) {
         return res.status(400).json({
@@ -118,6 +126,7 @@ router.patch("/:id", async (req, res) => {
       updates.title = title.trim();
     }
 
+    // Update completed
     if (completed !== undefined) {
       if (typeof completed !== "boolean") {
         return res.status(400).json({
@@ -129,17 +138,36 @@ router.patch("/:id", async (req, res) => {
       updates.completed = completed;
     }
 
+    // Update priority
+    if (priority !== undefined) {
+      const validPriorities = ["low", "medium", "high"];
+
+      if (!validPriorities.includes(priority)) {
+        return res.status(400).json({
+          success: false,
+          message: "Priority must be low, medium, or high",
+        });
+      }
+
+      updates.priority = priority;
+    }
+
+    // Make sure something was provided
     if (Object.keys(updates).length === 0) {
       return res.status(400).json({
         success: false,
-        message: "Provide a title or completed value to update",
+        message:
+          "Provide a title, completed value, or priority to update",
       });
     }
 
     const updatedTask = await Task.findByIdAndUpdate(
       id,
       { $set: updates },
-      { new: true, runValidators: true }
+      {
+        new: true,
+        runValidators: true,
+      }
     );
 
     if (!updatedTask) {
