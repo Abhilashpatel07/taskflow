@@ -10,6 +10,7 @@ const formatTask = (task) => ({
   title: task.title,
   completed: task.completed,
   priority: task.priority,
+  dueDate: task.dueDate,
   createdAt: task.createdAt,
   updatedAt: task.updatedAt,
 });
@@ -34,7 +35,7 @@ router.get("/", async (req, res) => {
 // POST /api/tasks — create a task
 router.post("/", async (req, res) => {
   try {
-    const { title ,priority} = req.body;
+    const { title ,priority, dueDate } = req.body;
 
     if (typeof title !== "string" || !title.trim()) {
       return res.status(400).json({
@@ -54,6 +55,7 @@ if (priority !== undefined && !validPriorities.includes(priority)) {
   const newTask = await Task.create({
   title: title.trim(),
   priority: priority || "medium",
+  dueDate: dueDate || null,
 });
     res.status(201).json({
       success: true,
@@ -103,7 +105,7 @@ router.delete("/:id", async (req, res) => {
 router.patch("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, completed, priority } = req.body;
+    const { title, completed, priority, dueDate } = req.body;
 
     if (!mongoose.isValidObjectId(id)) {
       return res.status(400).json({
@@ -151,13 +153,23 @@ router.patch("/:id", async (req, res) => {
 
       updates.priority = priority;
     }
+     // Update due date
+if (dueDate !== undefined) {
+  if (dueDate !== null && isNaN(Date.parse(dueDate))) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid due date",
+    });
+  }
 
+  updates.dueDate = dueDate;
+}
     // Make sure something was provided
     if (Object.keys(updates).length === 0) {
       return res.status(400).json({
         success: false,
         message:
-          "Provide a title, completed value, or priority to update",
+          "Provide a title, completed value, priority, or due date to update",
       });
     }
 
