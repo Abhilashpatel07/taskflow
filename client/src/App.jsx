@@ -1,4 +1,4 @@
- import "./App.css";
+import "./App.css";
  import { useEffect, useState } from "react";
  
  const API_URL = "http://localhost:5000/api/tasks";
@@ -294,6 +294,23 @@
    });
  
    // ==========================================
+   // DASHBOARD STATISTICS
+   // ==========================================
+ 
+   const totalTasks = tasks.length;
+ 
+   const completedTasks = tasks.filter((task) => task.completed).length;
+ 
+   const pendingTasks = tasks.filter((task) => !task.completed).length;
+ 
+   const highPriorityTasks = tasks.filter(
+     (task) => task.priority === "high"
+   ).length;
+ 
+   const completionPercentage =
+     totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
+ 
+   // ==========================================
    // UI
    // ==========================================
  
@@ -348,6 +365,46 @@
  
        {/* ERROR */}
        {error && <p className="error-message">{error}</p>}
+ 
+       {/* ======================================
+           DASHBOARD STATISTICS
+       ====================================== */}
+ 
+       <section className="dashboard-stats">
+         <div className="stat-card">
+           <h3>Total Tasks</h3>
+           <p>{totalTasks}</p>
+         </div>
+ 
+         <div className="stat-card">
+           <h3>Completed</h3>
+           <p>{completedTasks}</p>
+         </div>
+ 
+         <div className="stat-card">
+           <h3>Pending</h3>
+           <p>{pendingTasks}</p>
+         </div>
+ 
+         <div className="stat-card">
+           <h3>High Priority</h3>
+           <p>{highPriorityTasks}</p>
+         </div>
+ 
+         <div className="progress-card">
+           <div className="progress-info">
+             <h3>Task Completion</h3>
+             <span>{completionPercentage}%</span>
+           </div>
+ 
+           <div className="progress-bar">
+             <div
+               className="progress-fill"
+               style={{ width: `${completionPercentage}%` }}
+             ></div>
+           </div>
+         </div>
+       </section>
  
        {/* ======================================
            FILTERS
