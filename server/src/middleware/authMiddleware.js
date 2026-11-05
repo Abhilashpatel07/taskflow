@@ -1,40 +1,31 @@
-
 const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
-const authMiddleware = (req, res, next) => {
+// PROTECTED ROUTES: put this before any route that needs a logged-in user
+async function protect(req, res, next) {
   try {
-    const authHeader = req.headers.authorization;
+    const header = req.headers.authorization || "";
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({
-        success: false,
-        message: "Authentication required. Please log in.",
-      });
+    if (!header.startsWith("Bearer ")) {
+      return res.status(401).json({ message: "Not authorized. Please log in." });
     }
 
-    const token = authHeader.split(" ")[1];
+    const token = header.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    if (!token) {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid authentication token.",
-      });
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return res.status(401).json({ message: "User no longer exists." });
     }
 
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET
-    );
-
-    req.userId = decoded.userId;
-
+    req.user = user;
     next();
-  } catch (error) {
-    return res.status(401).json({
-      success: false,
-      message: "Invalid or expired token. Please log in again.",
-    });
+  } catch (err) {
+    return res
+      .status(401)
+      .json({ message: "Session expired or invalid. Please log in again." });
   }
-};
+}
 
-module.exports = authMiddleware;
+module.exports = { protect }; 
