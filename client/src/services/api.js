@@ -1,90 +1,79 @@
+ const API_BASE =
+  import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
-const API_BASE_URL = "http://localhost:5000/api";
+const TOKEN_KEY = "taskflow_token";
 
-// Store and retrieve JWT token
-export const getToken = () => {
-  return localStorage.getItem("token");
-};
+// ---------- Token helpers ----------
 
-export const setToken = (token) => {
-  localStorage.setItem("token", token);
-};
+export function getToken() {
+  return localStorage.getItem(TOKEN_KEY);
+}
 
-export const removeToken = () => {
-  localStorage.removeItem("token");
-};
+export function setToken(token) {
+  localStorage.setItem(TOKEN_KEY, token);
+}
 
-// Common API request handler
-const apiRequest = async (endpoint, options = {}) => {
+export function removeToken() {
+  localStorage.removeItem(TOKEN_KEY);
+}
+
+// ---------- Core request helper ----------
+
+async function request(path, { method = "GET", body } = {}) {
+  const headers = {};
   const token = getToken();
 
-  const headers = {
-    "Content-Type": "application/json",
-    ...options.headers,
-  };
+  if (body) headers["Content-Type"] = "application/json";
+  if (token) headers.Authorization = `Bearer ${token}`;
 
-  if (token) {
-    headers.Authorization = `Bearer ${token}`;
+  let response;
+
+  try {
+    response = await fetch(`${API_BASE}${path}`, {
+      method,
+      headers,
+      body: body ? JSON.stringify(body) : undefined,
+    });
+  } catch (networkError) {
+    throw new Error("Could not connect to the server.");
   }
 
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    ...options,
-    headers,
-  });
-
-  const data = await response.json().catch(() => ({}));
+  // Body may be empty, so parse safely
+  let data = {};
+  try {
+    data = await response.json();
+  } catch (err) {
+    data = {};
+  }
 
   if (!response.ok) {
-    throw new Error(data.message || data.error || "Something went wrong");
+    const error = new Error(data.message || "Request failed.");
+    error.status = response.status; // used by App.jsx to detect expired sessions
+    throw error;
   }
 
   return data;
-};
+}
 
-// Authentication APIs
-export const registerUser = (userData) => {
-  return apiRequest("/auth/register", {
-    method: "POST",
-    body: JSON.stringify(userData),
-  });
-};
+// ---------- Auth ----------
 
-export const loginUser = (userData) => {
-  return apiRequest("/auth/login", {
-    method: "POST",
-    body: JSON.stringify(userData),
-  });
-};
+export const registerUser = (payload) =>
+  request("/auth/register", { method: "POST", body: payload });
 
-export const getCurrentUser = () => {
-  return apiRequest("/auth/me");
-};
+export const loginUser = (payload) =>
+  request("/auth/login", { method: "POST", body: payload });
 
-export const logoutUser = () => {
-  removeToken();
-};
+export const getCurrentUser = () => request("/auth/me");
 
-// Task APIs
-export const getTasks = () => {
-  return apiRequest("/tasks");
-};
+// ---------- Tasks ----------
 
-export const createTask = (taskData) => {
-  return apiRequest("/tasks", {
-    method: "POST",
-    body: JSON.stringify(taskData),
-  });
-};
+export const getTasks = () => request("/tasks");
 
-export const updateTask = (id, taskData) => {
-  return apiRequest(`/tasks/${id}`, {
-    method: "PATCH",
-    body: JSON.stringify(taskData),
-  });
-};
+export const createTask = (payload) =>
+  request("/tasks", { method: "POST", body: payload });
 
-export const deleteTask = (id) => {
-  return apiRequest(`/tasks/${id}`, {
-    method: "DELETE",
-  });
-};
+export const updateTask = (id, payload) =>
+  request(`/tasks/${id}`, { method: "PATCH", body: payload });
+
+export const deleteTask = (id) =>
+  request(`/tasks/${id}`, { method: "DELETE" });
