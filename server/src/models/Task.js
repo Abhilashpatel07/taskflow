@@ -1,72 +1,44 @@
-// const mongoose = require("mongoose");
-
-// const taskSchema = new mongoose.Schema(
-//   {
-//     title: {
-//       type: String,
-//       required: true,
-//       trim: true,
-//     },
-
-//     completed: {
-//       type: Boolean,
-//       default: false,
-//     },
-
-//     priority: {
-//       type: String,
-//       enum: ["low", "medium", "high"],
-//       default: "medium",
-//     },
-
-//     dueDate: {
-//       type: Date,
-//       default: null,
-//     },
-//   },
-//   {
-//     timestamps: true,
-//   }
-// );
-
-// module.exports = mongoose.model("Task", taskSchema);
-
-const mongoose = require("mongoose");
+ const mongoose = require("mongoose");
 
 const taskSchema = new mongoose.Schema(
   {
+    // USER-SPECIFIC DATA: every task belongs to one user
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      index: true,
+    },
     title: {
       type: String,
       required: [true, "Task title is required"],
       trim: true,
       maxlength: 200,
     },
-
-    completed: {
-      type: Boolean,
-      default: false,
-    },
-
     priority: {
       type: String,
       enum: ["low", "medium", "high"],
       default: "medium",
     },
-
     dueDate: {
       type: Date,
       default: null,
     },
-
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
+    completed: {
+      type: Boolean,
+      default: false,
     },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
+
+taskSchema.set("toJSON", {
+  transform: (doc, ret) => {
+    ret.id = ret._id.toString();
+    delete ret._id;
+    delete ret.__v;
+    return ret;
+  },
+});
 
 module.exports = mongoose.model("Task", taskSchema);
