@@ -1,6 +1,38 @@
- /* =========================
-   TaskFlow - Main Container
-========================= */
+ /* ==========================================
+   TaskFlow - Consolidated Stylesheet
+========================================== */
+
+/* ---------- Base / Reset ---------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.taskflow-container h1,
+.taskflow-container h2,
+.taskflow-container h3,
+.taskflow-container p,
+.auth-card h1,
+.auth-card p {
+  margin: 0;
+}
+
+button,
+input,
+select {
+  font-family: inherit;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.25);
+  outline-offset: 2px;
+}
+
+/* ---------- Main Container ---------- */
 
 .taskflow-container {
   max-width: 900px;
@@ -17,606 +49,60 @@
 
 .taskflow-header h1 {
   font-size: 42px;
-  margin: 0 0 8px;
+  margin-bottom: 8px;
 }
 
 .taskflow-header p {
   color: #6b7280;
   font-size: 18px;
-  margin: 0;
 }
 
-/* =========================
-   Add Task Form
-========================= */
+/* ---------- User Header ---------- */
 
-.task-form {
+.user-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
+}
+
+.user-info {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 25px;
 }
 
-.task-input {
-  flex: 1;
-  min-width: 0;
-  padding: 13px 15px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  background: white;
-  color: #1f2937;
-  font-size: 16px;
-  outline: none;
-  box-sizing: border-box;
-}
-
-.task-input:focus {
-  border-color: #2563eb;
-}
-
-/* =========================
-   Priority Select
-========================= */
-
-.priority-select {
-  padding: 13px 14px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  background: white;
-  color: #374151;
-  font-size: 16px;
-  cursor: pointer;
-  outline: none;
-}
-
-.priority-select:focus {
-  border-color: #2563eb;
-}
-
-/* =========================
-   Due Date Input (Calendar)
-========================= */
-
-.due-date-input {
-  padding: 13px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 15px;
-  color: #374151;
-  background: white;
-  cursor: pointer;
-  box-sizing: border-box;
-
-  /* Keeps the calendar icon dark and visible on the white field,
-     even when the page itself uses a dark theme */
-  color-scheme: light;
-}
-
-.due-date-input:focus {
-  outline: none;
-  border-color: #2563eb;
-}
-
-.due-date-input::-webkit-calendar-picker-indicator {
-  cursor: pointer;
-  opacity: 1;
-}
-
-/* =========================
-   Add Button
-========================= */
-
-.add-button {
-  padding: 13px 20px;
-  border: none;
-  border-radius: 8px;
-  background: #2563eb;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.add-button:hover {
-  background: #1d4ed8;
-}
-
-.add-button:active {
-  transform: translateY(1px);
-}
-
-/* =========================
-   Error
-========================= */
-
-.error-message {
-  color: #dc2626;
-  margin-bottom: 20px;
-}
-
-/* =========================
-   Filters
-========================= */
-
-.filter-container {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 25px;
-}
-
-.filter-button {
-  padding: 9px 18px;
-  border: 1px solid #d1d5db;
-  border-radius: 7px;
-  background: white;
-  color: #374151;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.filter-button:hover {
-  background: #f3f4f6;
-}
-
-.filter-button.active {
-  background: #2563eb;
-  color: white;
-  border-color: #2563eb;
-}
-
-/* =========================
-   Task Heading
-========================= */
-
-.task-heading {
-  margin: 0 0 20px;
-  font-size: 24px;
-}
-
-/* =========================
-   Task List
-========================= */
-
-.task-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-/* =========================
-   Task Item
-========================= */
-
-.task-item {
+.user-avatar {
+  width: 42px;
+  height: 42px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 15px;
-  margin-bottom: 12px;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  box-sizing: border-box;
-  transition: box-shadow 0.2s, transform 0.2s;
+  justify-content: center;
+  border-radius: 50%;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-weight: 700;
 }
 
-.task-item:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-/* =========================
-   Checkbox
-========================= */
-
-.task-checkbox {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-  cursor: pointer;
-}
-
-/* =========================
-   Task Title
-========================= */
-
-.task-title {
-  flex: 1;
-  min-width: 0;
-  font-size: 16px;
-  word-break: break-word;
-}
-
-.task-title.completed {
-  text-decoration: line-through;
-  color: #9ca3af;
-}
-
-/* =========================
-   Priority Badge
-========================= */
-
-.priority-badge {
-  display: inline-block;
-  flex-shrink: 0;
-  padding: 5px 10px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.priority-low {
-  background: #dcfce7;
-  color: #166534;
-}
-
-.priority-medium {
-  background: #fef3c7;
-  color: #92400e;
-}
-
-.priority-high {
+.logout-button {
+  padding: 10px 16px;
   background: #fee2e2;
-  color: #991b1b;
-}
-
-/* =========================
-   Due Date Text
-========================= */
-
-.due-date {
-  font-size: 13px;
-  color: #6b7280;
-  white-space: nowrap;
-}
-
-.due-date.overdue {
-  color: #dc2626;
-  font-weight: 600;
-}
-
-/* =========================
-   Edit Input
-========================= */
-
-.edit-input {
-  flex: 1;
-  min-width: 0;
-  padding: 9px 10px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  background: white;
-  color: #1f2937;
-  font-size: 15px;
-  outline: none;
-  box-sizing: border-box;
-}
-
-.edit-input:focus {
-  border-color: #2563eb;
-}
-
-/* Smaller date and priority fields inside a task card */
-
-.task-item .priority-select,
-.task-item .due-date-input {
-  padding: 9px 10px;
-  font-size: 14px;
-}
-
-/* =========================
-   Buttons
-========================= */
-
-.edit-button,
-.save-button,
-.cancel-button,
-.delete-button {
-  padding: 8px 13px;
+  color: #b91c1c;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
+  font-weight: 600;
   cursor: pointer;
-  font-size: 14px;
-  white-space: nowrap;
-  transition: background 0.2s, transform 0.1s;
+  transition: background 0.2s;
 }
 
-.edit-button:active,
-.save-button:active,
-.cancel-button:active,
-.delete-button:active {
-  transform: translateY(1px);
+.logout-button:hover {
+  background: #fecaca;
 }
 
-/* Edit */
+/* ---------- Dashboard Stats ---------- */
 
-.edit-button {
-  background: #f3f4f6;
-  color: #374151;
-}
-
-.edit-button:hover {
-  background: #e5e7eb;
-}
-
-/* Save */
-
-.save-button {
-  background: #16a34a;
-  color: white;
-}
-
-.save-button:hover {
-  background: #15803d;
-}
-
-/* Cancel */
-
-.cancel-button {
-  background: #6b7280;
-  color: white;
-}
-
-.cancel-button:hover {
-  background: #4b5563;
-}
-
-/* Delete */
-
-.delete-button {
-  background: #dc2626;
-  color: white;
-}
-
-.delete-button:hover {
-  background: #b91c1c;
-}
-
-/* =========================
-   Empty / Loading Messages
-========================= */
-
-.loading-message,
-.empty-message {
-  color: #6b7280;
-  padding: 20px 0;
-}
-
-/* =========================
-   Tablet
-========================= */
-
-@media (max-width: 768px) {
-  .taskflow-container {
-    padding: 40px 20px;
-  }
-
-  .taskflow-header h1 {
-    font-size: 38px;
-  }
-
-  .task-form {
-    flex-wrap: wrap;
-  }
-
-  .task-input {
-    flex: 1 1 100%;
-  }
-
-  .priority-select {
-    flex: 1;
-  }
-
-  .due-date-input {
-    flex: 1;
-  }
-
-  .add-button {
-    flex: 1;
-  }
-
-  .task-item {
-    flex-wrap: wrap;
-  }
-
-  .task-title {
-    flex: 1 1 auto;
-  }
-}
-
-/* =========================
-   Mobile
-========================= */
-
-@media (max-width: 600px) {
-  .taskflow-container {
-    padding: 30px 15px;
-  }
-
-  .taskflow-header {
-    margin-bottom: 25px;
-  }
-
-  .taskflow-header h1 {
-    font-size: 34px;
-  }
-
-  .taskflow-header p {
-    font-size: 16px;
-  }
-
-  /* Add Task Form */
-
-  .task-form {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-
-  .task-input,
-  .priority-select,
-  .due-date-input,
-  .add-button {
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .priority-select {
-    padding: 13px 15px;
-  }
-
-  .add-button {
-    padding: 13px;
-  }
-
-  /* Filters */
-
-  .filter-container {
-    width: 100%;
-    gap: 8px;
-  }
-
-  .filter-button {
-    flex: 1;
-    padding: 10px 8px;
-  }
-
-  /* Heading */
-
-  .task-heading {
-    font-size: 22px;
-  }
-
-  /* Task Card */
-
-  .task-item {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 10px;
-    padding: 14px;
-  }
-
-  .task-checkbox {
-    grid-column: 1;
-    grid-row: 1;
-  }
-
-  .task-title {
-    grid-column: 2;
-    grid-row: 1;
-    align-self: center;
-  }
-
-  .priority-badge {
-    grid-column: 3;
-    grid-row: 1;
-    align-self: center;
-    margin-right: 0;
-  }
-
-  .due-date {
-    grid-column: 1 / 4;
-    grid-row: 2;
-    width: 100%;
-  }
-
-  .edit-button,
-  .delete-button {
-    width: 100%;
-  }
-
-  .edit-button {
-    grid-column: 1 / 3;
-    grid-row: 3;
-  }
-
-  .delete-button {
-    grid-column: 3;
-    grid-row: 3;
-  }
-
-  /* Edit Mode */
-
-  .edit-input {
-    grid-column: 1 / 4;
-    grid-row: 1;
-    width: 100%;
-  }
-
-  .task-item .priority-select {
-    grid-column: 1 / 4;
-    grid-row: 2;
-    width: 100%;
-  }
-
-  .task-item .due-date-input {
-    grid-column: 1 / 4;
-    grid-row: 3;
-    width: 100%;
-  }
-
-  .save-button {
-    grid-column: 1 / 2;
-    grid-row: 4;
-  }
-
-  .cancel-button {
-    grid-column: 2 / 3;
-    grid-row: 4;
-  }
-
-  .task-item .delete-button {
-    grid-row: 4;
-  }
-
-  /* Error */
-
-  .error-message {
-    font-size: 14px;
-  }
-}
-
-/* =========================
-   Very Small Screens
-========================= */
-
-@media (max-width: 380px) {
-  .taskflow-container {
-    padding: 25px 10px;
-  }
-
-  .taskflow-header h1 {
-    font-size: 30px;
-  }
-
-  .taskflow-header p {
-    font-size: 14px;
-  }
-
-  .filter-button {
-    font-size: 13px;
-    padding: 9px 5px;
-  }
-
-  .task-item {
-    padding: 12px;
-  }
-
-  .priority-badge {
-    font-size: 11px;
-    padding: 4px 7px;
-  }
-
-  .edit-button,
-  .delete-button,
-  .save-button,
-  .cancel-button {
-    font-size: 13px;
-    padding: 8px 9px;
-  }
-}
-
-/* DASHBOARD STATISTICS */
 .dashboard-stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -644,21 +130,7 @@
   color: #111827;
 }
 
-/* RESPONSIVE DASHBOARD */
-@media (max-width: 768px) {
-  .dashboard-stats {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 480px) {
-  .dashboard-stats {
-    grid-template-columns: 1fr;
-  }
-}
- /* ==========================================
-   DAY 13 - DASHBOARD PROGRESS
-========================================== */
+/* ---------- Progress ---------- */
 
 .progress-card {
   grid-column: 1 / -1;
@@ -700,9 +172,151 @@
   border-radius: 10px;
   transition: width 0.3s ease;
 }
-/* ==========================================
-   DAY 14 - SEARCH AND FILTERS
-========================================== */
+
+/* ---------- Add Task Form ---------- */
+
+.task-form {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.task-input {
+  flex: 1;
+  min-width: 0;
+  padding: 13px 15px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #1f2937;
+  font-size: 16px;
+  outline: none;
+}
+
+.task-input:focus {
+  border-color: #2563eb;
+}
+
+.priority-select {
+  padding: 13px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #374151;
+  font-size: 16px;
+  cursor: pointer;
+  outline: none;
+}
+
+.priority-select:focus {
+  border-color: #2563eb;
+}
+
+.due-date-input {
+  padding: 13px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 15px;
+  color: #374151;
+  background: #ffffff;
+  cursor: pointer;
+
+  /* Keeps the calendar icon visible on the white field in dark themes */
+  color-scheme: light;
+}
+
+.due-date-input:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.due-date-input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 1;
+}
+
+.add-button {
+  padding: 13px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.add-button:hover {
+  background: #1d4ed8;
+}
+
+.add-button:active {
+  transform: translateY(1px);
+}
+
+/* ---------- Messages ---------- */
+
+.error-message {
+  padding: 12px 15px;
+  margin: 15px 0;
+  color: #b91c1c;
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+}
+
+.loading-message,
+.empty-message {
+  padding: 25px;
+  margin: 20px 0;
+  text-align: center;
+  color: #6b7280;
+  background: #ffffff;
+  border-radius: 10px;
+}
+
+.no-results {
+  text-align: center;
+  padding: 30px 15px;
+  color: #6b7280;
+  background: #ffffff;
+  border: 1px dashed #d1d5db;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+/* ---------- Filters ---------- */
+
+.filter-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.filter-button {
+  padding: 9px 18px;
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #374151;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.filter-button:hover {
+  background: #f3f4f6;
+}
+
+.filter-button.active {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+/* ---------- Search & Priority Filter ---------- */
 
 .search-filter-container {
   display: flex;
@@ -745,21 +359,182 @@
   border-color: #2563eb;
 }
 
-.no-results {
-  text-align: center;
-  padding: 30px 15px;
-  color: #6b7280;
-  background: #ffffff;
-  border: 1px dashed #d1d5db;
-  border-radius: 10px;
-  margin-top: 20px;
+/* ---------- Task List ---------- */
+
+.task-heading {
+  margin: 0 0 20px;
+  font-size: 24px;
 }
-/* ==========================================
-   DAY 15 - AUTHENTICATION
-========================================== */
+
+.task-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  transition: box-shadow 0.2s;
+}
+
+.task-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.task-checkbox {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.task-title {
+  flex: 1;
+  min-width: 120px;
+  font-size: 16px;
+  overflow-wrap: anywhere;
+}
+
+.task-title.completed {
+  text-decoration: line-through;
+  color: #9ca3af;
+}
+
+/* Priority badge */
+
+.priority-badge {
+  display: inline-block;
+  flex-shrink: 0;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.priority-low {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.priority-medium {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.priority-high {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Due date text */
+
+.due-date {
+  font-size: 13px;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.due-date.overdue {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+/* Edit mode */
+
+.edit-input {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #1f2937;
+  font-size: 15px;
+  outline: none;
+}
+
+.edit-input:focus {
+  border-color: #2563eb;
+}
+
+.task-item .priority-select,
+.task-item .due-date-input {
+  padding: 9px 10px;
+  font-size: 14px;
+}
+
+/* Task action buttons */
+
+.edit-button,
+.save-button,
+.cancel-button,
+.delete-button {
+  padding: 8px 13px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  white-space: nowrap;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.edit-button:active,
+.save-button:active,
+.cancel-button:active,
+.delete-button:active {
+  transform: translateY(1px);
+}
+
+.edit-button {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.edit-button:hover {
+  background: #e5e7eb;
+}
+
+.save-button {
+  background: #16a34a;
+  color: #ffffff;
+}
+
+.save-button:hover {
+  background: #15803d;
+}
+
+.cancel-button {
+  background: #6b7280;
+  color: #ffffff;
+}
+
+.cancel-button:hover {
+  background: #4b5563;
+}
+
+.delete-button {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.delete-button:hover {
+  background: #b91c1c;
+}
+
+/* ---------- Authentication ---------- */
 
 .auth-container {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -802,6 +577,8 @@
   border: 1px solid #d1d5db;
   border-radius: 8px;
   font-size: 15px;
+  background: #ffffff;
+  color: #111827;
 }
 
 .auth-form input:focus {
@@ -845,116 +622,21 @@
   font-weight: 600;
   cursor: pointer;
 }
+
 /* ==========================================
-   DAY 16 - USER DASHBOARD HEADER
+   RESPONSIVE (all media queries last, widest first,
+   so they correctly override the base rules above)
 ========================================== */
 
-.user-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
-  flex-wrap: wrap;
-  margin-bottom: 25px;
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.user-avatar {
-  width: 42px;
-  height: 42px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: #dbeafe;
-  color: #1d4ed8;
-  font-weight: 700;
-}
-
-.logout-button {
-  padding: 10px 16px;
-  background: #fee2e2;
-  color: #b91c1c;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.logout-button:hover {
-  background: #fecaca;
-}
-/* ==========================================
-   DAY 17 - TASK CARD IMPROVEMENTS
-========================================== */
-
-.task-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  padding: 16px;
-  margin-bottom: 12px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  transition: box-shadow 0.2s, transform 0.2s;
-}
-
-.task-item:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-}
-
-.task-title {
-  flex: 1;
-  min-width: 120px;
-  overflow-wrap: anywhere;
-}
-
-.task-title.completed {
-  color: #9ca3af;
-  text-decoration: line-through;
-}
-
-.loading-message,
-.empty-message {
-  padding: 25px;
-  text-align: center;
-  color: #6b7280;
-  background: #ffffff;
-  border-radius: 10px;
-  margin: 20px 0;
-}
-
-.error-message {
-  padding: 12px 15px;
-  margin: 15px 0;
-  color: #b91c1c;
-  background: #fee2e2;
-  border: 1px solid #fecaca;
-  border-radius: 8px;
-}
-
-button:focus-visible,
-input:focus-visible,
-select:focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.25);
-  outline-offset: 2px;
-}
-/* ==========================================
-   DAY 17 - RESPONSIVE DESIGN
-========================================== */
+/* ---------- Tablet ---------- */
 
 @media (max-width: 768px) {
   .taskflow-container {
-    width: 95%;
-    padding: 15px;
+    padding: 30px 15px;
+  }
+
+  .taskflow-header h1 {
+    font-size: 38px;
   }
 
   .dashboard-stats {
@@ -966,10 +648,14 @@ select:focus-visible {
     flex-wrap: wrap;
   }
 
-  .task-form input,
-  .task-form select,
-  .task-form button {
-    max-width: 100%;
+  .task-input {
+    flex: 1 1 100%;
+  }
+
+  .priority-select,
+  .due-date-input,
+  .add-button {
+    flex: 1;
   }
 
   .task-item {
@@ -977,9 +663,164 @@ select:focus-visible {
   }
 }
 
+/* ---------- Mobile ---------- */
+
+@media (max-width: 600px) {
+  .taskflow-header {
+    margin-bottom: 25px;
+  }
+
+  .taskflow-header h1 {
+    font-size: 30px;
+  }
+
+  .taskflow-header p {
+    font-size: 16px;
+  }
+
+  /* Add task form */
+
+  .task-form {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .task-input,
+  .priority-select,
+  .due-date-input,
+  .add-button {
+    width: 100%;
+    flex: none;
+  }
+
+  .priority-select {
+    padding: 13px 15px;
+  }
+
+  /* Filters */
+
+  .filter-container {
+    flex-wrap: nowrap;
+    width: 100%;
+    gap: 8px;
+  }
+
+  .filter-button {
+    flex: 1;
+    padding: 10px 8px;
+  }
+
+  .search-filter-container {
+    flex-direction: column;
+  }
+
+  .priority-filter {
+    width: 100%;
+  }
+
+  .task-heading {
+    font-size: 22px;
+  }
+
+  /* Task card (view mode) */
+
+  .task-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 10px;
+    padding: 14px;
+  }
+
+  .task-checkbox {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .task-title {
+    grid-column: 2;
+    grid-row: 1;
+    min-width: 0;
+  }
+
+  .priority-badge {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .due-date {
+    grid-column: 1 / 4;
+    grid-row: 2;
+  }
+
+  .edit-button,
+  .delete-button {
+    width: 100%;
+  }
+
+  .edit-button {
+    grid-column: 1 / 3;
+    grid-row: 3;
+  }
+
+  .delete-button {
+    grid-column: 3;
+    grid-row: 3;
+  }
+
+  /* Task card (edit mode) - applies only when an edit input is present */
+
+  .task-item:has(.edit-input) {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .task-item:has(.edit-input) .task-checkbox {
+    display: none;
+  }
+
+  .task-item .edit-input,
+  .task-item .priority-select,
+  .task-item .due-date-input {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .task-item .edit-input {
+    grid-row: 1;
+  }
+
+  .task-item .priority-select {
+    grid-row: 2;
+  }
+
+  .task-item .due-date-input {
+    grid-row: 3;
+  }
+
+  .task-item:has(.edit-input) .save-button {
+    grid-column: 1;
+    grid-row: 4;
+  }
+
+  .task-item:has(.edit-input) .cancel-button {
+    grid-column: 2;
+    grid-row: 4;
+  }
+
+  .task-item:has(.edit-input) .delete-button {
+    grid-column: 3;
+    grid-row: 4;
+  }
+
+  .error-message {
+    font-size: 14px;
+  }
+}
+
+/* ---------- Small phones ---------- */
+
 @media (max-width: 480px) {
   .taskflow-container {
-    width: 100%;
     padding: 12px;
   }
 
@@ -991,27 +832,49 @@ select:focus-visible {
     grid-template-columns: 1fr;
   }
 
-  .search-filter-container {
-    flex-direction: column;
-  }
-
-  .priority-filter {
-    width: 100%;
-  }
-
-  .task-item {
-    align-items: flex-start;
-  }
-
-  .task-title {
-    flex-basis: 70%;
-  }
-
   .auth-card {
     padding: 24px 18px;
   }
 
   .user-header {
     align-items: flex-start;
+  }
+}
+
+/* ---------- Very small screens ---------- */
+
+@media (max-width: 380px) {
+  .taskflow-container {
+    padding: 10px;
+  }
+
+  .taskflow-header h1 {
+    font-size: 24px;
+  }
+
+  .taskflow-header p {
+    font-size: 14px;
+  }
+
+  .filter-button {
+    font-size: 13px;
+    padding: 9px 5px;
+  }
+
+  .task-item {
+    padding: 12px;
+  }
+
+  .priority-badge {
+    font-size: 11px;
+    padding: 4px 7px;
+  }
+
+  .edit-button,
+  .delete-button,
+  .save-button,
+  .cancel-button {
+    font-size: 13px;
+    padding: 8px 9px;
   }
 }
